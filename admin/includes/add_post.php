@@ -71,7 +71,6 @@ if (isset($_POST['create_post'])) {
     <div class="form-group">
         <input class="btn btn-primary" type="submit" name="create_post" value="Publish Post">
     </div>
-
+    <!----Achintha Wijesekara--->
 </form>
 
-<!----Achintha Wijesekara--->
