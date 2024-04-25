@@ -43,6 +43,8 @@ if (isset($_POST['Update_post'])){
         }
     }
 
+    $post_content = mysqli_real_escape_string($connection, $_POST['post_content']);
+
     $query = "UPDATE posts SET ";
     $query .= "post_title = '" . mysqli_real_escape_string($connection, $post_title) . "', ";
     $query .= "post_category_id = '{$post_category_id}', ";
