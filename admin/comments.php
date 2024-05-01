@@ -1,3 +1,4 @@
+
 <?php include "includes/admin_header.php" ?>
 
 <div id="wrapper">
@@ -42,7 +43,7 @@
 
                     default:
 
-                    include "includes/view_all_posts.php";
+                    include "includes/view_all_comments.php";
 
                     break;
 
