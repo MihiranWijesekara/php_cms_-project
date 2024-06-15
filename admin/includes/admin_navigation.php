@@ -1,3 +1,5 @@
+
+
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -60,7 +62,7 @@
                         <a href="./categories.php"><i class="fa fa-fw fa-wrench"></i> Categories </a>
                     </li>
                    
-                    <li class="active">
+                    <li class="">
                         <a href="./comments.php"><i class="fa fa-fw fa-file"></i> Comments</a>
                     </li>
                     
@@ -69,10 +71,10 @@
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Users <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse">
                             <li>
-                                <a href="#">Dropdown Item</a>
+                                <a href="users.php"> View All Users</a>
                             </li>
                             <li>
-                                <a href="#">Dropdown Item</a>
+                                <a href="users.php?source=add_user">Add User </a>
                             </li>
                         </ul>
                     </li>

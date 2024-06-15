@@ -6,30 +6,25 @@ if (isset($_POST['create_post'])) {
     $post_author        = $_POST['author'];
     $post_category_id   = $_POST['post_category'];
     $post_status        = $_POST['post_status'];
-    $post_image         = $_FILES['post_image']['name']; // Corrected
-    $post_image_temp    = $_FILES['post_image']['tmp_name']; // Corrected
+    $post_image         = $_FILES['post_image']['name'];
+    $post_image_temp    = $_FILES['post_image']['tmp_name'];
 
     $post_tags          = $_POST['post_tags'];
     $post_content       = $_POST['post_content'];
-    $post_date          = date('Y-m-d'); // Modified to standard format
-    $post_comment_count = 4;
+    $post_date          = date('Y-m-d'); 
 
     move_uploaded_file($post_image_temp, "../images/$post_image");
 
-    $query = "INSERT INTO posts (post_category_id,post_title,post_author,post_date,
-    post_image, post_content,post_tags,post_comment_count,post_status)";
-
-    $query .= " VALUES ('{$post_category_id}', '{$post_title}', '{$post_author}', '{$post_date}', '{$post_image}', '{$post_content}', '{$post_tags}', {$post_comment_count}, '{$post_status}')";
+    $query = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_status) ";
+    $query .= "VALUES ('{$post_category_id}', '{$post_title}', '{$post_author}', '{$post_date}', '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_status}')";
 
     $create_post_query = mysqli_query($connection, $query);
 
     confirmQuery($create_post_query);
- 
+
 }
 
 ?>
-
-
 
 <form action="" method="post" enctype="multipart/form-data">
 
@@ -86,4 +81,3 @@ if (isset($_POST['create_post'])) {
     </div>
     
 </form>
-
