@@ -77,7 +77,7 @@ if (isset($_POST['checkBoxArray'])) {
             <tr>
                 <th><input id="selectAllBoxes" type="checkbox"></th>
                 <th>Id</th>
-                <th>Author</th>
+                <th>Users</th>
                 <th>Title</th>
                 <th>Category</th>
                 <th>Status</th>
@@ -102,6 +102,7 @@ if (isset($_POST['checkBoxArray'])) {
 
                 $post_id = $row['post_id'];
                 $post_author = $row['post_author'];
+                $post_user = $row['post_user'];
                 $post_title = $row['post_title'];
                 $post_category_id = $row['post_category_id'];
                 $post_status = $row['post_status'];
@@ -117,7 +118,15 @@ if (isset($_POST['checkBoxArray'])) {
             <?php
 
                 echo "<td> $post_id </td>";
-                echo "<td> $post_author </td>";
+                
+                if( !empty($post_author) ){
+                    echo "<td> $post_author </td>";
+
+                } elseif ( !empty($post_user) ){
+                    echo "<td> $post_user </td>";
+
+                }
+
                 echo "<td> $post_title </td>";
 
 
@@ -137,7 +146,32 @@ if (isset($_POST['checkBoxArray'])) {
                 echo "<td> $post_status </td>";
                 echo "<td> <image class='img-responsive' src= ' ../images/$post_image' alt='image'> </td>";
                 echo "<td> $post_tags </td>";
-                echo "<td> $post_comment_count </td>";
+
+
+                // Ensure $post_id is properly set and sanitized
+                $post_id = isset($post_id) ? (int)$post_id : 0;
+
+                $query = "SELECT * FROM comments WHERE comment_pos = $post_id";
+                $send_comment_query = mysqli_query($connection, $query);
+
+                if ($send_comment_query) {
+                    $count_comments = mysqli_num_rows($send_comment_query);
+
+                    if ($count_comments > 0) {
+                        $row = mysqli_fetch_array($send_comment_query);
+                        $comment_id = $row['comment_id'];
+                    } else {
+                        $comment_id = 0;
+                    }
+
+                    echo "<td><a href='post_comments.php?id=$post_id'>$count_comments</a></td>";
+                } else {
+                    // Handle query failure
+                    echo "Error: " . mysqli_error($connection);
+                }
+
+
+
                 echo "<td> $post_date </td>";
                 echo "<td><a href='../post.php?p_id={$post_id}'> View Posts </a></td> ";
                 echo "<td><a onClick=\"javascript: return confirm('Are You sure you want to delete');\" href='posts.php?delete={$post_id}'> Delete </a></td> ";
@@ -165,8 +199,8 @@ if (isset($_GET['delete'])) {
 }
 
 if (isset($_GET['reset'])) {
-   
-   $the_post_id = $_GET['reset'];
+
+    $the_post_id = $_GET['reset'];
     $query = "UPDATE posts SET post_views_count = 0 WHERE post_id =" . mysqli_real_escape_string($connection, $_GET['reset']) . " ";
     $resetQuery = mysqli_query($connection, $query);
 
