@@ -225,4 +225,4 @@ if (isset($_GET['reset'])) {
 
        });
     });
-</script
+</script>
