@@ -52,6 +52,8 @@ if(isset($_SESSION['user_role'])){
 <script  type="text/javascript" src="https://www.google.com/jsapi" ></script>
 
 <script src="http://tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+
+<script src="js/jquery.js"></script> 
 </head>
 
 <body>

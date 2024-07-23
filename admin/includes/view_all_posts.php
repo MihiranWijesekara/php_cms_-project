@@ -1,4 +1,7 @@
 <?php
+
+include("delete_modal.php");
+
 if (isset($_POST['checkBoxArray'])) {
     foreach ($_POST['checkBoxArray'] as $postValueId) {
         $bluk_options = $_POST['bluk_options'];
@@ -174,7 +177,8 @@ if (isset($_POST['checkBoxArray'])) {
 
                 echo "<td> $post_date </td>";
                 echo "<td><a href='../post.php?p_id={$post_id}'> View Posts </a></td> ";
-                echo "<td><a onClick=\"javascript: return confirm('Are You sure you want to delete');\" href='posts.php?delete={$post_id}'> Delete </a></td> ";
+                echo "<td><a rel='$post_id' class='delete_link'> Delete </a></td> ";
+              //  echo "<td><a onClick=\"javascript: return confirm('Are You sure you want to delete');\" href='posts.php?delete={$post_id}'> Delete </a></td> ";
                 echo "<td><a  href='posts.php?source=edit_post&p_id={$post_id}'> Edit </a></td> ";
                 echo "<td><a href='posts.php?reset=$post_id' class='btn btn-success'>$post_views_count</a></td>";
 
@@ -200,7 +204,7 @@ if (isset($_GET['delete'])) {
 
 if (isset($_GET['reset'])) {
 
-    $the_post_id = $_GET['reset'];
+    $the_post_id = escape( $_GET['reset']);
     $query = "UPDATE posts SET post_views_count = 0 WHERE post_id =" . mysqli_real_escape_string($connection, $_GET['reset']) . " ";
     $resetQuery = mysqli_query($connection, $query);
 
@@ -211,3 +215,14 @@ if (isset($_GET['reset'])) {
 
 
 ?>
+
+<script>
+    $(document).ready(function(){
+       $(".delete_link").on('click', function(){
+         var id = $(this).attr("rel");
+
+         alert(id);
+
+       });
+    });
+</script>
