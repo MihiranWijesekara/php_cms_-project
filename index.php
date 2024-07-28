@@ -35,12 +35,18 @@ include "includes/navigation.php";
             $page_1 = ($page * 5) - $per_page;
         }
 
+        if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') {
+            $post_query_count = "SELECT * FROM posts ";
+        } else {
+            $post_query_count = "SELECT * FROM posts WHERE post_status = 'published' ";
+        }
 
-
-
-        $post_query_count = "SELECT * FROM posts ";
         $find_count = mysqli_query($connection,$post_query_count);
         $count = mysqli_num_rows($find_count);
+
+        if($count < 1) {
+            echo  " <h1 class='text-center'> No Posts Available </h1> ";
+        } else {
 
         $count = ceil($count/$per_page);
 
@@ -58,7 +64,7 @@ include "includes/navigation.php";
             $post_status = $row['post_status'];
 
 
-            if($post_status == 'published' ) {
+            
 
             ?>
 
@@ -68,12 +74,12 @@ include "includes/navigation.php";
             </h1>
 
             <!-- First Blog Post -->
-             <h1> <?php echo $count; ?> </h1>
+           
             <h2>
                 <a href="post.php?p_id=<?php echo $post_id;  ?>"><?php echo $post_title   ?> </a>
             </h2>
             <p class="lead">
-            by <a href="author_posts.php?author=<?php echo $post_author ?>&p_id=<?php echo $post_id; ?>"><?php echo $post_author ?></a>
+            by 
             </p>
             <p><span class="glyphicon glyphicon-time"></span><?php echo $post_date ?></p>
             <hr>
@@ -87,7 +93,7 @@ include "includes/navigation.php";
             <hr>       
 
            
-     <?php   } }  ?>
+     <?php  }   }  ?>
         
  
         </div>
