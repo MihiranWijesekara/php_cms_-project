@@ -86,3 +86,38 @@ function findAllCategories()
         echo "</tr>";
     }
 }
+
+function recordCount($table){
+    global $connection;
+    $query = "SELECT * FROM " . $table;
+    $select_all_post = mysqli_query($connection, $query);
+
+    if (!$select_all_post) {
+        die("Query Failed: " . mysqli_error($connection));
+    }
+
+    $result = mysqli_num_rows($select_all_post);
+
+    confirmQuery($select_all_post);
+
+    return $result;
+}
+
+function checkStatus($table,$column,$status){
+    global $connection;
+    $query = "SELECT * FROM $table  WHERE $column = '$status' ";
+    $result = mysqli_query($connection, $query);
+
+    confirmQuery($result);
+
+ return  mysqli_num_rows($result);
+
+}
+
+function checkUserRole($table,$column,$role){
+    global $connection;
+    $query = "SELECT * FROM $table  WHERE $column = '$role' ";
+    $select_all_subscribers = mysqli_query($connection, $query);
+    return mysqli_num_rows($select_all_subscribers);
+
+}

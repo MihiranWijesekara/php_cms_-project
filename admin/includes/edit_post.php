@@ -80,7 +80,12 @@ if (isset($_POST['Update_post'])) {
                 $cat_id = $row['cat_id'];
                 $cat_title = $row['cat_title'];
 
-                echo  "<option value='$cat_id'>{$cat_title}</option>";
+
+                if ($cat_id == $post_category_id) {
+                    echo  "<option selected value='{$cat_id}'>{$cat_title}</option>";
+                } else {
+                    echo  "<option value='{$cat_id}'>{$cat_title}</option>";
+                }
             }
             ?>
         </select>
@@ -91,7 +96,7 @@ if (isset($_POST['Update_post'])) {
         <select name="post_user" id="">
 
 
-        <?php   echo "<option value='{$post_user}'> {$post_user} </option>";  ?>
+            <?php echo "<option value='{$post_user}'> {$post_user} </option>";  ?>
 
             <?php
             $query  = "SELECT * FROM users ";
@@ -148,7 +153,7 @@ if (isset($_POST['Update_post'])) {
 
     <div class="form-group">
         <label for="post_content">Post Content</label>
-        <textarea type="text" class="form-control" name="post_content" id="" cols="30" rows="10"><?php echo $post_content; ?></textarea>
+        <textarea type="text" class="form-control" name="post_content" id="" cols="30" rows="10"><?php echo str_replace('\r\n', '</br>',$post_content) ; ?></textarea>
     </div>
 
     <div class="form-group">
