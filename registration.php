@@ -8,6 +8,10 @@ if (isset($_POST['submit'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
+    if(username_exists($username)){
+        $message = "User exists";
+    }
+
     if (!empty($username) && !empty($email) && !empty($password)) {
 
 

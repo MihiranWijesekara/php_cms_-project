@@ -34,7 +34,7 @@ function users_online()
             $users_online_query = mysqli_query($connection, " SELECT * FROM users_online WHERE time < '$time_out' ");
             echo $count_user = mysqli_num_rows($users_online_query);
         }
-    }  // get request issest()
+    }  
 
 }
 
@@ -120,4 +120,35 @@ function checkUserRole($table,$column,$role){
     $select_all_subscribers = mysqli_query($connection, $query);
     return mysqli_num_rows($select_all_subscribers);
 
+}
+
+function is_admin($username = ''){
+
+    global $connection;
+    $query = "SELECT user_role FROM users WHERE username = '$username' ";
+    $result = mysqli_query($connection, $query);
+    confirmQuery($result);
+
+    $row = mysqli_fetch_array($result);
+    if($row['user_role'] == 'admin' ){
+        return true;
+    }else {
+        return false;
+    }
+
+
+}
+
+function username_exists($username){
+
+    global $connection;
+    $query = "SELECT username FROM users WHERE username = '$username' ";
+    $result = mysqli_query($connection, $query);
+    confirmQuery($result);
+
+    if(mysqli_num_rows($result) > 0 ){
+        return true;
+    } else {
+        return false;
+    }
 }
