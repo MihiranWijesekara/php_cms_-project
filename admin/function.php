@@ -1,7 +1,14 @@
 <?php
-function escape($string){
+
+function redirect($location)
+{
+    return header("Location:" . $location);
+}
+
+function escape($string)
+{
     global $connection;
-  return  mysqli_real_escape_string($connection, trim($string));
+    return  mysqli_real_escape_string($connection, trim($string));
 }
 
 function users_online()
@@ -34,8 +41,7 @@ function users_online()
             $users_online_query = mysqli_query($connection, " SELECT * FROM users_online WHERE time < '$time_out' ");
             echo $count_user = mysqli_num_rows($users_online_query);
         }
-    }  
-
+    }
 }
 
 users_online();
@@ -87,7 +93,8 @@ function findAllCategories()
     }
 }
 
-function recordCount($table){
+function recordCount($table)
+{
     global $connection;
     $query = "SELECT * FROM " . $table;
     $select_all_post = mysqli_query($connection, $query);
@@ -103,26 +110,27 @@ function recordCount($table){
     return $result;
 }
 
-function checkStatus($table,$column,$status){
+function checkStatus($table, $column, $status)
+{
     global $connection;
     $query = "SELECT * FROM $table  WHERE $column = '$status' ";
     $result = mysqli_query($connection, $query);
 
     confirmQuery($result);
 
- return  mysqli_num_rows($result);
-
+    return  mysqli_num_rows($result);
 }
 
-function checkUserRole($table,$column,$role){
+function checkUserRole($table, $column, $role)
+{
     global $connection;
     $query = "SELECT * FROM $table  WHERE $column = '$role' ";
     $select_all_subscribers = mysqli_query($connection, $query);
     return mysqli_num_rows($select_all_subscribers);
-
 }
 
-function is_admin($username = ''){
+function is_admin($username = '')
+{
 
     global $connection;
     $query = "SELECT user_role FROM users WHERE username = '$username' ";
@@ -130,25 +138,101 @@ function is_admin($username = ''){
     confirmQuery($result);
 
     $row = mysqli_fetch_array($result);
-    if($row['user_role'] == 'admin' ){
+    if ($row['user_role'] == 'admin') {
         return true;
-    }else {
+    } else {
         return false;
     }
-
-
 }
 
-function username_exists($username){
+function username_exists($username)
+{
 
     global $connection;
     $query = "SELECT username FROM users WHERE username = '$username' ";
     $result = mysqli_query($connection, $query);
     confirmQuery($result);
 
-    if(mysqli_num_rows($result) > 0 ){
+    if (mysqli_num_rows($result) > 0) {
         return true;
     } else {
         return false;
+    }
+}
+
+function email_exists($email)
+{
+
+    global $connection;
+    $query = "SELECT user_email FROM users WHERE user_email = '$email' ";
+    $result = mysqli_query($connection, $query);
+    confirmQuery($result);
+
+    if (mysqli_num_rows($result) > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+function register_user($username, $email, $password)
+{
+
+    global $connection;
+
+        $username = mysqli_real_escape_string($connection, $username);
+        $email = mysqli_real_escape_string($connection, $email);
+        $password = mysqli_real_escape_string($connection, $password);
+
+        $password = password_hash('$password', PASSWORD_BCRYPT, array('cost' => 12));
+
+        $query = "INSERT INTO users (username, user_password, user_email, user_role) VALUES('$username', '$password', '$email', 'Subscriber')";
+        $register_user_query = mysqli_query($connection, $query);
+        confirmQuery($register_user_query);
+    
+}
+
+function login_user($username, $password)
+{
+
+    global $connection;
+
+    $username = trim('username');
+    $password = trim('password');
+
+
+    $username = mysqli_real_escape_string($connection, $username);
+    $password = mysqli_real_escape_string($connection, $password);
+
+    $query = "SELECT * FROM users WHERE username = '{$username}'";
+    $select_user_query = mysqli_query($connection, $query);
+    if (!$select_user_query) {
+        die("QUERY FAILED" . mysqli_error($connection));
+    }
+
+    while ($row = mysqli_fetch_array($select_user_query)) {
+        $db_user_id = $row['user_id'];
+        $db_username = $row['username'];
+        $db_user_password = $row['user_password'];
+        $db_user_firstname = $row['user_firstname'];
+        $db_user_lastname = $row['user_lastname'];
+        $db_user_role = $row['user_role'];
+    }
+
+    //  $password = crypt($password, $db_user_password);
+
+
+
+    if (password_verify($password, $db_user_password)) {
+
+        $_SESSION['username'] = $db_username;
+        $_SESSION['firstname'] = $db_user_firstname;
+        $_SESSION['lastname'] = $db_user_lastname;
+        $_SESSION['user_role'] = $db_user_role;
+
+       redirect("/cms/admin");
+    } else {
+        redirect("/cms/index.php");
     }
 }
