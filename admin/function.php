@@ -5,6 +5,44 @@ function redirect($location)
     return header("Location:" . $location);
 }
 
+function query($query){
+    global $connection;
+    return mysqli_query($connection, $query);
+}
+
+
+function ifItsMethod($method = null){
+    if($_SERVER['REQUEST_METHOD'] == strtoupper($method) ){
+        return true;
+    }
+    return false;
+}
+
+function isLoggedIn(){
+    if(isset($_SESSION['user_role'])){
+        return true;
+    }
+    return false;
+}
+
+function loggedUserId(){
+    if(isLoggedIn()){
+        $result = query("SELECT * FROM users WHERE username = '" .$_SESSION['username']. "' ");
+        $user = mysqli_fetch_array($result);
+        if(mysqli_num_rows($result) >= 1 ){
+            return $user['user_id'];
+        }
+
+    }
+    return false;
+}
+
+function checkIfUSerIsLoggedInAndRedirect($redirectLocation=null){
+    if(isLoggedIn()){
+        redirect($redirectLocation);
+    }
+}
+
 function escape($string)
 {
     global $connection;
